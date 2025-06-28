@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    hikari.jdbc-url: jdbc:h2:mem:test_db;MODE=MySQL;
+    username: root
+    password: 1234
+  jpa:
+    hibernate.ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        highlight_sql: true
