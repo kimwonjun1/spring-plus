@@ -9,6 +9,7 @@ spring:
   datasource:
     # 데이터베이스 연결 URL (로컬 MySQL 기준)
     url: jdbc:mysql://localhost:3306/expert
+    driver-class-name: com.mysql.cj.jdbc.Driver
     # 사용자 아이디
     username: root
     # 사용자 비밀번호
@@ -25,6 +26,7 @@ spring:
         # 쿼리를 예브게 출력
         format_sql: true
         # 컨트롤러나 뷰에서 DB에 영향을 주는 것은 차단하기 위해 영속성 컨테스트를 서비스 계층에서 닫음
+        highlight_sql: true
         open-in-view: false
 
 jwt:
