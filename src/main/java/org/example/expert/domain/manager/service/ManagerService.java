@@ -1,8 +1,10 @@
 package org.example.expert.domain.manager.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.common.dto.AuthUser;
 import org.example.expert.domain.common.exception.InvalidRequestException;
+import org.example.expert.domain.log.service.LogService;
 import org.example.expert.domain.manager.dto.request.ManagerSaveRequest;
 import org.example.expert.domain.manager.dto.response.ManagerResponse;
 import org.example.expert.domain.manager.dto.response.ManagerSaveResponse;
@@ -20,6 +22,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -28,9 +31,20 @@ public class ManagerService {
     private final ManagerRepository managerRepository;
     private final UserRepository userRepository;
     private final TodoRepository todoRepository;
+    private final LogService logService;
 
     @Transactional
     public ManagerSaveResponse saveManager(AuthUser authUser, long todoId, ManagerSaveRequest managerSaveRequest) {
+        try {
+            logService.saveLog(
+                "SAVE_MANAGER_ATTEMPT",
+                String.format("userId=%d, managerUserId=%d, todoId=%d",
+                    authUser.getId(), managerSaveRequest.getManagerUserId(), todoId)
+            );
+        } catch (Exception e) {
+            log.warn("로그 기록 실패", e);
+        }
+
         // 일정을 만든 유저
         User user = User.fromAuthUser(authUser);
         Todo todo = todoRepository.findById(todoId)
